@@ -1,0 +1,16 @@
+{
+    "manifest_version": 3,
+    "name": "Fram",
+    "version": "1.0",
+    "description": "Extension with a default side panel.",
+    "side_panel": {
+      "default_path": "src/ui/index.html"
+    },
+    "action": {
+      "default_title": "Open Fram"
+    },
+    "background": {
+      "service_worker": "src/scripts/background.js"
+    },
+    "permissions": ["sidePanel"]
+  }
