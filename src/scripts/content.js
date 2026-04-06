@@ -12,7 +12,40 @@
         console.log("Hook loaded", constraints);
         const stream = await originalGUM(constraints);
 
-        return stream;
+        //early returns if there is no camera or browser does not support our extension
+        if (!constraints || !constraints.video) 
+            return stream;
+
+        const videoTrack = stream.getVideoTracks()[0];
+
+        if(!videoTrack)
+                return stream;
+        
+        if (typeof MediaStreamTrackProcessor === "undefined" || typeof MediaStreamTrackGenerator === "undefined") {
+            return stream;
+        }
+
+        const processor =  new MediaStreamTrackProcessor({ track: videoTrack });
+        const generator = new MediaStreamTrackGenerator({ kind: "video" });
+
+        const canvas = new OffscreenCanvas(1, 1);
+        const ctx = canvas.getContext("2d");
+
+        const transformer = new TransformStream({
+            async transform(frame, controller){
+                const w = frame.displayWidth;
+                const h = frame.displayHeight;
+
+                if (canvas.width !== w || canvas.height !== h){
+                    canvas.width = w;
+                    canvas.height = h;
+                }
+            }
+        })
+
+
+
+    return stream;
     };
 
     function compositeOverlay(ctx, width, height){

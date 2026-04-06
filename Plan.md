@@ -262,8 +262,15 @@ content.js  ──receives config──▶  composites overlay onto camera frame
 
 ## Build Order
 
-1. **`manifest.json`** — get the extension loadable in Chrome
-2. **`content.js`** — getUserMedia hook + compositor (the hard part, the learning)
+1. ~~**`manifest.json`**~~ — done
+2. **`content.js`** — getUserMedia hook + compositor (IN PROGRESS)
+   - ~~Step 1: Get the video track from the stream~~
+   - ~~Step 2: Check if Insertable Streams API exists~~
+   - ~~Step 3: Create processor and generator~~
+   - ~~Step 4: Create OffscreenCanvas + context~~
+   - **Step 5: Create the TransformStream** ← LEFT OFF HERE (started: have `w`, `h`, and canvas resize — still need to draw frame, call compositeOverlay, create new VideoFrame, close old frame, enqueue)
+   - Step 6: Pipe processor → transform → generator
+   - Step 7: Swap the track on the stream
 3. **`bridge.js`** — tiny forwarder (~15 lines)
 4. **`popup.html` + `popup.css` + `popup.js`** — controls UI
 5. **Test** — load unpacked in Chrome, open Meet, verify overlay appears
@@ -287,3 +294,20 @@ Once the pipeline works, we add image selection/QR generation as the next step.
 - Paid tier ($1/mo) — removes watermark
 - Polish UI
 - Chrome Web Store listing
+
+---
+
+## Chrome Web Store Publishing Checklist
+
+Before publishing, complete all of the following:
+
+- [ ] **Contact email** — add and verify on the Account tab
+- [ ] **Icon** — 128x128 PNG
+- [ ] **Screenshot** — at least one, 1280x800 or 640x400
+- [ ] **Privacy practices tab:**
+  - [ ] Justification for host permission use (`<all_urls>`)
+  - [ ] Justification for remote code use
+  - [ ] Justification for `sidePanel` permission
+  - [ ] Single purpose description
+  - [ ] Certify data usage compliance with Developer Program Policies
+- [ ] **Privacy policy URL** — required since the extension accesses camera data
